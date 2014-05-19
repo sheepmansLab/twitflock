@@ -6,14 +6,16 @@ import jp.sheepman.app.twitflock.adapter.TweetAdpter;
 import jp.sheepman.app.twitflock.async.SearchTimelineAsyncTask;
 import twitter4j.Status;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout.LayoutParams;
 
 public class MainActivity extends BaseActivity<Status>{
 
@@ -30,13 +32,19 @@ public class MainActivity extends BaseActivity<Status>{
 		}
 		this.adapter = new TweetAdpter(this);
 		
-		ListView lv = new ListView(this);
+		ListView lv = (ListView)this.findViewById(R.id.list_view01);
+		Button btn = (Button)this.findViewById(R.id.btn_maps);
+
 		lv.setAdapter(adapter);
-		
-		addContentView(lv, new LayoutParams(W_C, W_C));
-		
+		btn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, GoogleMapsActivity.class);
+				startActivity(intent);
+			}
+		});		
 		SearchTimelineAsyncTask task = new SearchTimelineAsyncTask(this);
-		task.execute();
+		task.execute();		
 	}
 
 	@Override

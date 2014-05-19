@@ -4,5 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="jp.sheepman.app.twitflock.MainActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/btn_maps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/hello_world" />
+
+        <ListView
+            android:id="@+id/list_view01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_maps"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+
+        </ListView>
+
+    </RelativeLayout>
+
+</FrameLayout>
 

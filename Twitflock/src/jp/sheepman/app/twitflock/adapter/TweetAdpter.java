@@ -1,13 +1,10 @@
 package jp.sheepman.app.twitflock.adapter;
 
-import java.net.URL;
-
 import jp.sheepman.app.twitflock.R;
+import jp.sheepman.app.twitflock.async.DownloadImageAsyncTask;
 import twitter4j.Status;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,22 +29,18 @@ public class TweetAdpter extends ArrayAdapter<Status> {
 		
 		TextView name = (TextView)convertView.findViewById(R.id.text_name);
 		TextView tweet = (TextView)convertView.findViewById(R.id.text_tweet);
+		ImageView icon = (ImageView)convertView.findViewById(R.id.img_prof_icon);
 		
 		String nameStr = item.getUser().getName()
 						+ "(@" + item.getUser().getScreenName() + ")";
 		name.setText(nameStr);
 		tweet.setText(item.getText());
-		try{
-			if(item.getUser().getProfileImageURL() != null){
-				ImageView icon = (ImageView)convertView.findViewById(R.id.img_prof_icon);
-				Bitmap bmp = BitmapFactory.decodeStream(new URL(item.getUser().getProfileImageURL()).openStream());
-				icon.setImageBitmap(bmp);
-			}
-		} catch(Exception e) {
-			//TODO Exceptionèàóù
-			e.printStackTrace();
-		}
 		
+		String imageurl = item.getUser().getProfileImageURL();
+		if(imageurl != null){
+			DownloadImageAsyncTask task = new DownloadImageAsyncTask(icon);
+			task.execute(imageurl);
+		}		
 		return convertView;
 	}
 
