@@ -5,9 +5,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import jp.sheepman.app.twitflock.R;
+import jp.sheepman.app.twitflock.util.ImageChacheUtil;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.provider.MediaStore.Images.ImageColumns;
 import android.widget.ImageView;
 
 public class DownloadImageAsyncTask extends AsyncTask<String, Void, Drawable> {
@@ -20,17 +22,21 @@ public class DownloadImageAsyncTask extends AsyncTask<String, Void, Drawable> {
 	
 	@Override
 	protected Drawable doInBackground(String... params) {
+		Drawable image = null;
 		try{
 			if(params[0] != null){
-				URL url = new URL(params[0]);
-				return Drawable.createFromStream(url.openStream(), "");
+				image = ImageChacheUtil.getImage(params[0]);
+				if(image == null){
+					URL url = new URL(params[0]);
+					image = Drawable.createFromStream(url.openStream(), "");
+				}
 			}
 		} catch (MalformedURLException me) {
 			me.printStackTrace();
 		} catch (IOException ie) {
 			ie.printStackTrace();
 		}
-		return null;
+		return image;
 	}
 	@Override
 	protected void onPostExecute(Drawable result) {
