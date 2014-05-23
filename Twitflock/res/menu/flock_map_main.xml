@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="jp.sheepman.app.twitflock.GoogleMapsActivity" >
+    tools:context="jp.sheepman.app.twitflock.FlockMapMainActivity" >
 
     <item
         android:id="@+id/action_settings"
