@@ -11,11 +11,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,6 +33,7 @@ public class FlockMapMainActivity extends BaseActivity<Status> {
 	private List<Marker> markList = new ArrayList<Marker>();
 	private GoogleMap map;
 	
+	private LatLng location;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class FlockMapMainActivity extends BaseActivity<Status> {
 		}
 		//イベントハンドラからの参照用に保存
 		activity = this;
+		location = PLACE;
 	}
 
 	@Override
@@ -71,20 +76,37 @@ public class FlockMapMainActivity extends BaseActivity<Status> {
 		if(map == null){
 			getGoogleMap();			
 		}
-		
-		//ツイートを検索する
-		new SearchTimelineAsyncTask(activity).execute();
 	}
 	
 	/**
 	 * Mapオブジェクトを取得する
 	 */
 	private void getGoogleMap(){
+		Button btnSearch = (Button)findViewById(R.id.btn_search);
 		Fragment base = getFragmentManager().findFragmentById(R.id.container);
 		map = ((MapFragment)base.getFragmentManager().findFragmentById(R.id.map)).getMap();
+		
 		if(map != null){
-			moveCamera(PLACE);
+			map.setMyLocationEnabled(true);
+			moveCamera(location);
+			map.setOnMapClickListener(new OnMapClickListener() {
+				@Override
+				public void onMapClick(LatLng arg0) {
+					location = arg0;
+					moveCamera(location);
+				}
+			});
 		}
+		btnSearch.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				for(Marker mark:markList){
+					mark.remove();
+				}
+				//ツイートを検索する
+				new SearchTimelineAsyncTask(activity).execute(location);
+			}
+		});
 	}
 	
 	/**
